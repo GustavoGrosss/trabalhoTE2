@@ -1,0 +1,97 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>Cadastro de Restaurantes</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <form [formGroup]="restaurantesForm">
+        <ion-item>
+            <ion-label position="floating">Nome:</ion-label>
+            <ion-input formControlName="nome" type="text"></ion-input>
+            <ion-text
+                color="danger"
+                *ngIf="nome?.invalid && (nome?.dirty || nome?.touched)"
+            >
+                <small *ngIf="nome?.errors?.['required']">
+                    O campo nome é obrigatório
+                </small>
+                <small *ngIf="nome?.errors?.['minlength']">
+                    O campo nome deve conter no mínimo
+                    {{ nome?.errors?.['minlength'].requiredLength }} caracteres
+                </small>
+                <small *ngIf="nome?.errors?.['maxlength']">
+                    O campo nome deve conter no máximo
+                    {{ nome?.errors?.['maxlength'].requiredLength }} caracteres
+                </small>
+            </ion-text>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Avaliação (de 1 a 5):</ion-label>
+
+            <ion-input formControlName="avaliacao" type="number"></ion-input>
+
+            <small *ngIf="avaliacao?.errors?.['min']">
+                1 é o valor mínimo na avaliação
+            </small>
+
+            <small *ngIf="avaliacao?.errors?.['max']">
+                5 é o valor máximo na avaliação
+            </small>
+
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Endereço:</ion-label>
+
+            <ion-input formControlName="endereco" type="string"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Prazo de entrega:</ion-label>
+
+            <ion-input formControlName="prazoEntrega" type="number" prefix="Min"></ion-input>
+
+            <small *ngIf="avaliacao?.errors?.['min']">
+                1 minuto é o valor mínimo de prazo de entrega
+            </small>
+
+            <small *ngIf="avaliacao?.errors?.['max']">
+                180 minutos é o valor máximo de prazo de entrega
+            </small>
+
+        </ion-item>
+        <ion-list>
+            <ion-list-header>
+                <ion-label>Qual o produto principal do restaurante: </ion-label>
+            </ion-list-header>
+            <ion-radio-group name="tipo" formControlName="tipo">
+                <ion-item>
+                    <ion-radio slot="start" value="P">Pratos</ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-radio slot="start" value="L">Lanches</ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-radio slot="start" value="Z">Pizzas</ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-radio slot="start" value="S">Sobremesas</ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-radio slot="start" value="B">Bebidas</ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-radio slot="start" value="O">Outros</ion-radio>
+                </ion-item>
+            </ion-radio-group>
+        </ion-list>
+
+        <ion-fab vertical="bottom" horizontal="end">
+            <ion-fab-button (click)="salvar()" [disabled]="!restaurantesForm.valid">
+                <ion-icon name="checkmark-outline"></ion-icon>
+            </ion-fab-button>
+        </ion-fab>
+
+    </form>
+</ion-content>

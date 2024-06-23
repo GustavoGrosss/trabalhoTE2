@@ -1,0 +1,80 @@
+{
+  "entregadores": [
+    {
+      "id": 1,
+      "nome": "Rodrigo Gomes",
+      "data_nascimento": "1976-02-25T00:00:00",
+      "genero": "M",
+      "placaVeiculo": "JWD6298",
+      "tipoVeiculo": "M"
+    },
+    {
+      "id": 2,
+      "nome": "Davi Silva",
+      "data_nascimento": "2000-04-28T20:30:34.363-03:00",
+      "genero": "M",
+      "placaVeiculo": "JWD6298",
+      "tipoVeiculo": "M"
+    }
+  ],
+  "restaurantes": [
+    {
+      "nome": "Barão lanches",
+      "avaliacao": 5,
+      "endereco": "R. Wenceslau Braz, 665",
+      "prazoEntrega": 50,
+      "tipo": "L",
+      "id": 2
+    },
+    {
+      "id": 3,
+      "nome": "Chico Beer",
+      "avaliacao": 5,
+      "endereco": "R. Des. Pedro Silva, 1151",
+      "prazoEntrega": 50,
+      "tipo": "Z"
+    },
+    {
+      "nome": "ba lanches ",
+      "avaliacao": 5,
+      "endereco": "balneario rincão",
+      "prazoEntrega": 30,
+      "tipo": "L",
+      "id": 4
+    }
+  ],
+  "pratos": [
+    {
+      "id": 1,
+      "nome": "Carré de Cordeiro",
+      "preco": 129,
+      "proteina": "O",
+      "vegano": "N",
+      "avaliacao": 2
+    },
+    {
+      "id": 2,
+      "nome": "Xis Salada",
+      "preco": 24,
+      "proteina": "G",
+      "vegano": "N",
+      "avaliacao": 5
+    },
+    {
+      "id": 3,
+      "nome": "Pizza De Lombinho",
+      "preco": 66,
+      "proteina": "S",
+      "vegano": "N",
+      "avaliacao": 4
+    },
+    {
+      "nome": "teste prato",
+      "preco": 257.25,
+      "proteina": "G",
+      "vegano": "N",
+      "avaliacao": 5,
+      "id": 4
+    }
+  ]
+}

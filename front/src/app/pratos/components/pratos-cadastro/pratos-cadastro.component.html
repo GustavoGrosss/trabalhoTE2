@@ -1,0 +1,93 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>Cadastro de Pratos</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <form [formGroup]="pratosForm">
+        <ion-item>
+            <ion-label position="floating">Nome:</ion-label>
+            <ion-input formControlName="nome" type="text"></ion-input>
+            <ion-text
+                color="danger"
+                *ngIf="nome?.invalid && (nome?.dirty || nome?.touched)"
+            >
+                <small *ngIf="nome?.errors?.['required']">
+                    O campo nome é obrigatório
+                </small>
+                <small *ngIf="nome?.errors?.['minlength']">
+                    O campo nome deve conter no mínimo
+                    {{ nome?.errors?.['minlength'].requiredLength }} caracteres
+                </small>
+                <small *ngIf="nome?.errors?.['maxlength']">
+                    O campo nome deve conter no máximo
+                    {{ nome?.errors?.['maxlength'].requiredLength }} caracteres
+                </small>
+            </ion-text>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Preço:</ion-label>
+
+            <ion-input formControlName="preco" type="number" prefix="R$"></ion-input>
+        </ion-item>
+        <ion-list>
+            <ion-list-header>
+                <ion-label>Tipo de Proteina</ion-label>
+            </ion-list-header>
+            <ion-radio-group name="proteina" formControlName="proteina">
+                <ion-item>
+                    <ion-radio slot="start" value="G">Gado</ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-radio slot="start" value="S">Suino</ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-radio slot="start" value="A">Aves</ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-radio slot="start" value="M">Frutos do mar</ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-radio slot="start" value="O">Outros</ion-radio>
+                </ion-item>
+            </ion-radio-group>
+        </ion-list>
+        <ion-list>
+            <ion-list-header>
+                <ion-label>Prato vegano?</ion-label>
+            </ion-list-header>
+            <ion-radio-group name="vegano" formControlName="vegano">
+                <ion-item>
+                    <ion-radio slot="start" value="S">Sim</ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-radio slot="start" value="N">Não</ion-radio>
+                </ion-item>
+            </ion-radio-group>
+        </ion-list>
+
+        <ion-item>
+            <ion-label position="floating">Avaliação (de 1 a 5):</ion-label>
+
+            <ion-input formControlName="avaliacao" type="number"></ion-input>
+
+            <small *ngIf="avaliacao?.errors?.['min']">
+                1 é o valor mínimo na avaliação
+            </small>
+
+            <small *ngIf="avaliacao?.errors?.['max']">
+                5 é o valor máximo na avaliação
+            </small>
+
+        </ion-item>
+
+        <ion-fab vertical="bottom" horizontal="end">
+            <ion-fab-button (click)="salvar()" [disabled]="!pratosForm.valid">
+                <ion-icon name="checkmark-outline"></ion-icon>
+            </ion-fab-button>
+        </ion-fab>
+    </form>
+</ion-content>

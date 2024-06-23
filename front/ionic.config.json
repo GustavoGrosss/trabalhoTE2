@@ -1,0 +1,7 @@
+{
+  "name": "trabalho_gustavo_pedro",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
