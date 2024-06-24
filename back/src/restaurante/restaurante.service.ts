@@ -7,8 +7,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RestauranteEntity } from './restaurante.entity';
 import { RestauranteDto } from './restaurante.dto';
-import { PratoEntity } from '../prato/prato.entity';
-import { proteinaEnum } from '../prato/proteina.enum';
 import { tipoEnum } from './tipo.enum';
 
 @Injectable()
@@ -42,9 +40,7 @@ export class RestauranteService {
   }
 
   async create(dto: RestauranteDto) {
-    const newRestaurante = this.restauranteRepository.create({
-      ...dto,
-    });
+    const newRestaurante = this.restauranteRepository.create(dto);
 
     this.validatePrazo(newRestaurante);
     this.validateNome(newRestaurante);
@@ -79,12 +75,12 @@ export class RestauranteService {
   private async validateNome(restaurante: RestauranteEntity) {
     const restaurantes = await this.findAll();
 
-    const validade = restaurantes.find((r) => r.nome === restaurante.nome);
+    const validade = restaurantes.find(
+      (r) => r.nome === restaurante.nome && r.id !== restaurante.id,
+    );
 
     if (!!validade) {
-      throw new BadRequestException(
-        ' De acordo com a Lei da Propriedade Industrial – LPI, a Lei n.º 9.279/96, é permitido que haja duas marcas iguais desde que os ramos de atividades sejam diferentes. O que não se aplica ao caso por se tratem de dois restaurantes.',
-      );
+      throw new BadRequestException('LPI, a Lei n.º 9.279/96');
     }
   }
 

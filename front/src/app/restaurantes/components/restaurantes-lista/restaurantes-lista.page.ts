@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AlertController, ToastController, ViewDidLeave, ViewWillEnter, ViewWillLeave,} from '@ionic/angular';
 import {HttpClient} from '@angular/common/http';
 import {RestaurantesInterface} from "../../../interfaces";
+import {StorageService} from "../../../storage.service";
 
 @Component({
     selector: 'app-restaurantes',
@@ -11,11 +12,13 @@ import {RestaurantesInterface} from "../../../interfaces";
 export class RestauranteListaComponent
     implements OnInit, ViewWillEnter, ViewDidLeave, ViewWillLeave, ViewDidLeave {
     restaurantes: RestaurantesInterface[] = [];
+    qtdRegistros: string | undefined;
 
     constructor(
         private alertController: AlertController,
         private toastController: ToastController,
         private httpClient: HttpClient,
+        private storageService: StorageService,
     ) {
     }
 
@@ -34,6 +37,8 @@ export class RestauranteListaComponent
 
     ngOnInit() {
         this.listar();
+
+        this.qtdRegistros = !!this.storageService.getItem('qtd') ? this.storageService.getItem('qtd') : 0;
     }
 
     listar() {
@@ -42,6 +47,7 @@ export class RestauranteListaComponent
         lista.subscribe(
             (dados) => {
                 this.restaurantes = dados;
+                this.storageService.setItem('qtd', this.restaurantes.length);
             },
             (erro) => {
                 this.toastController
@@ -81,7 +87,7 @@ export class RestauranteListaComponent
                 (erro) => {
                     this.toastController
                         .create({
-                            message: `Erro na exclusão: ${erro.message}`,
+                            message: `Erro na exclusão, confira se o restaurante em questão não tem relação com nem um prato ou entregador: ${erro.message}`,
                             duration: 5000,
                             keyboardClose: true,
                             color: 'danger',

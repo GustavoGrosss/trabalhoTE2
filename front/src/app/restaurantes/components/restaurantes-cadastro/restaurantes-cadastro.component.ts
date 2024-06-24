@@ -80,6 +80,7 @@ export class RestaurantesCadastroComponent implements OnInit {
         const restaurante: RestaurantesInterface = {
             ...this.restaurantesForm.value,
             id: this.restauranteId,
+            entregadores: this.selectedEntregadores
         };
 
         if (!restaurante.id) {

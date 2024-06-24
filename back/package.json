@@ -24,8 +24,9 @@
     "typeorm:run": "npm run typeorm-default -- migration:run",
     "typeorm:revert": "npm run typeorm-default -- migration:revert",
     "typeorm:drop": "npm run typeorm-default schema:drop",
-    "typeorm-seed": "npm run build && npx typeorm -d ./dist/db/data-source-seed.js",
-    "typeorm-seed:create": "npm run typeorm-seed -- migration:create",
+    "typeorm-seed": "npm run build && npx typeorm -d ./dist/data-source-seed.js",
+    "typeorm-seed2": "npm run build && npx typeorm",
+    "typeorm-seed:create": "npm run typeorm-seed2 -- migration:create",
     "typeorm-seed:run": "npm run typeorm-seed -- migration:run",
     "typeorm-seed:revert": "npm run typeorm-seed -- migration:revert",
     "seed:run": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:run -d ./data-source.ts"

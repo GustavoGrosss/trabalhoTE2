@@ -11,7 +11,7 @@ import {
   IsEnum,
 } from 'class-validator';
 import { tipoEnum } from './tipo.enum';
-import { EntregadorEntity } from '../entregador/entregador.entity';
+import { EntregadorDto } from '../entregador/entregador.dto';
 
 export class RestauranteDto {
   @IsUUID()
@@ -43,6 +43,5 @@ export class RestauranteDto {
   tipo: tipoEnum;
 
   @IsArray()
-  @IsUUID('4', { each: true })
-  entregadores: EntregadorEntity[];
+  entregadores: EntregadorDto[];
 }
