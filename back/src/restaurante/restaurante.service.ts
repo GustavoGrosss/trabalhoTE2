@@ -1,8 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RestauranteEntity } from './restaurante.entity';
 import { RestauranteDto } from './restaurante.dto';
+import { PratoEntity } from '../prato/prato.entity';
+import { proteinaEnum } from '../prato/proteina.enum';
+import { tipoEnum } from './tipo.enum';
 
 @Injectable()
 export class RestauranteService {
@@ -39,6 +46,10 @@ export class RestauranteService {
       ...dto,
     });
 
+    this.validatePrazo(newRestaurante);
+    this.validateNome(newRestaurante);
+    this.validateVeganoProteina(newRestaurante);
+
     return this.restauranteRepository.save(newRestaurante);
   }
 
@@ -50,6 +61,38 @@ export class RestauranteService {
       ...dto,
     });
 
+    this.validatePrazo(updatedRestaurante);
+    this.validateNome(updatedRestaurante);
+    this.validateVeganoProteina(updatedRestaurante);
+
     return this.restauranteRepository.save(updatedRestaurante);
+  }
+
+  private validatePrazo(restaurante: RestauranteEntity) {
+    if (restaurante.prazoEntrega < 10) {
+      throw new BadRequestException(
+        'Os artigos 37 e 67 do Código de defesa do Consumidor descrevem o creme e as punições para propaganda enganosa, o que consideramos ser com prazo de entrega inferior a 10 minutos.',
+      );
+    }
+  }
+
+  private async validateNome(restaurante: RestauranteEntity) {
+    const restaurantes = await this.findAll();
+
+    const validade = restaurantes.find((r) => r.nome === restaurante.nome);
+
+    if (!!validade) {
+      throw new BadRequestException(
+        ' De acordo com a Lei da Propriedade Industrial – LPI, a Lei n.º 9.279/96, é permitido que haja duas marcas iguais desde que os ramos de atividades sejam diferentes. O que não se aplica ao caso por se tratem de dois restaurantes.',
+      );
+    }
+  }
+
+  private validateVeganoProteina(restaurante: RestauranteEntity) {
+    if (restaurante.tipo !== tipoEnum.BEBIDAS && restaurante.avaliacao == 5) {
+      throw new BadRequestException(
+        'Impossivel um restaurante ser otimo se não for de bebidas!',
+      );
+    }
   }
 }
