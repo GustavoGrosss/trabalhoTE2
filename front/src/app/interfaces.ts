@@ -20,16 +20,17 @@ export interface PratosInterface {
     preco: number;
     proteina: ProteinaEnum;
     vegano: string;
-    avaliacao: number
+    avaliacao: number;
+    restauranteId: string;
 }
 
 export interface EntregadoresInterface {
     id?: string | null;
     nome: string;
-    data_nascimento: Date;
+    dataNascimento: Date;
     genero: GeneroEnum;
     placaVeiculo: string;
-    tipoVeiculo: TipoVeiculoEnum
+    tipoVeiculo: TipoVeiculoEnum;
 }
 
 export interface RestaurantePratoInterface {

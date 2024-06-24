@@ -22,6 +22,10 @@ const routes: Routes = [
     {
         path: 'restaurante',
         loadChildren: () => import('./restaurantes/restaurantes.module').then(m => m.RestaurantesPageModule)
+    },
+    {
+        path: 'pratos/editar',
+        loadChildren: () => import('./pratos/pratos.module').then(m => m.PratosPageModule)
     }
 ];
 

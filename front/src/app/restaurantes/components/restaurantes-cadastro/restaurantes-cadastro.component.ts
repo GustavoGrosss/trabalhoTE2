@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ToastController} from '@ionic/angular';
 import {HttpClient} from "@angular/common/http";
 import {TipoRestauranteEnum} from "../../../../environments/tipo_restaurante.enum";
-import {PratosInterface, RestaurantesInterface} from "../../../interfaces";
+import {EntregadoresInterface, PratosInterface, RestaurantesInterface} from "../../../interfaces";
 
 @Component({
     selector: 'app-restaurantes-cadastro',
@@ -14,6 +14,9 @@ import {PratosInterface, RestaurantesInterface} from "../../../interfaces";
 export class RestaurantesCadastroComponent implements OnInit {
     restauranteId: string | null;
     restaurantesForm: FormGroup;
+    selectedEntregadores: EntregadoresInterface[] = [];
+    entregadores: EntregadoresInterface[] = [];
+    pratos: PratosInterface[] = [];
 
     constructor(
         private toastController: ToastController,
@@ -30,10 +33,17 @@ export class RestaurantesCadastroComponent implements OnInit {
         if (id) {
             this.restauranteId = id;
             this.httpClient.get<RestaurantesInterface>(`http://localhost:3000/restaurantes/${id}`).subscribe((restaurante) => {
-                console.log(restaurante)
+
+                this.selectedEntregadores = restaurante.entregadores
+                this.pratos = restaurante.pratos
+
                 this.restaurantesForm = this.createForm(restaurante);
             });
         }
+
+        this.httpClient.get<EntregadoresInterface[]>(`http://localhost:3000/entregadores`).subscribe((entregadores) => {
+            this.entregadores = entregadores;
+        });
     }
 
     private createForm(restaurante?: RestaurantesInterface) {
@@ -76,9 +86,22 @@ export class RestaurantesCadastroComponent implements OnInit {
             this.httpClient.post('http://localhost:3000/restaurantes', restaurante).subscribe(
                 () => this.router.navigate(['restaurante']),
                 (erro) => {
+
+                    let messagem = '';
+
+                    if (Array.isArray(erro.error.message)) {
+                        erro.error.message.map((item: string)=> {
+                                console.log(item)
+                                messagem = messagem + item + ';';
+                            }
+                        )
+                    } else {
+                        messagem = erro.error.message;
+                    }
+
                     this.toastController
                         .create({
-                            message: `Erro ao atualizar: ${erro.message}`,
+                            message: `Erro ao atualizar: ${messagem}`,
                             duration: 5000,
                             keyboardClose: true,
                             color: 'danger',
@@ -93,9 +116,22 @@ export class RestaurantesCadastroComponent implements OnInit {
         this.httpClient.put(`http://localhost:3000/restaurantes/${restaurante.id}`, restaurante).subscribe(
             () => this.router.navigate(['restaurante']),
             (erro) => {
+
+                let messagem = '';
+
+                if (Array.isArray(erro.error.message)) {
+                    erro.error.message.map((item: string)=> {
+                            console.log(item)
+                            messagem = messagem + item + ';';
+                        }
+                    )
+                } else {
+                    messagem = erro.error.message;
+                }
+
                 this.toastController
                     .create({
-                        message: `Erro ao atualizar: ${erro.message}`,
+                        message: `Erro ao atualizar: ${messagem}`,
                         duration: 5000,
                         keyboardClose: true,
                         color: 'danger',
@@ -111,5 +147,22 @@ export class RestaurantesCadastroComponent implements OnInit {
 
     get avaliacao() {
         return this.restaurantesForm.get('avaliacao');
+    }
+
+    onEntregadorSelected(entregador: EntregadoresInterface) {
+        const index = this.selectedEntregadores.findIndex(r => r.id === entregador.id);
+        if (index === -1) {
+            this.selectedEntregadores.push(entregador);
+        } else {
+            this.selectedEntregadores.splice(index, 1);
+        }
+    }
+
+    isSelected(entregador: EntregadoresInterface): boolean {
+        return this.selectedEntregadores.some(r => r.id === entregador.id);
+    }
+
+    editDish() {
+        this.router.navigate([`/pratos/editar`]);
     }
 }

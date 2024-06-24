@@ -94,4 +94,31 @@
         </ion-fab>
 
     </form>
+
+    <ion-list>
+        <ion-list-header>
+            <ion-label>Entregadores</ion-label>
+        </ion-list-header>
+        <ion-item *ngFor="let entregador of entregadores" (click)="onEntregadorSelected(entregador)">
+            <ion-label>{{ entregador.nome }}</ion-label>
+            <ion-checkbox slot="start" [checked]="isSelected(entregador)"></ion-checkbox>
+        </ion-item>
+    </ion-list>
+
+    <ion-content>
+        <ion-list>
+            <ion-list-header>
+                <ion-label>Pratos</ion-label>
+            </ion-list-header>
+            <ion-item *ngFor="let prato of pratos">
+                <ion-label>{{prato.nome}}   {{prato.preco}}</ion-label>
+                <ion-buttons>
+                    <ion-button color="primary" (click)="editDish()">
+                        <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
+                    </ion-button>
+                </ion-buttons>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+
 </ion-content>

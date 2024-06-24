@@ -30,7 +30,6 @@
         </ion-item>
         <ion-item>
             <ion-label position="floating">Preço:</ion-label>
-
             <ion-input formControlName="preco" type="number" prefix="R$"></ion-input>
         </ion-item>
         <ion-list>
@@ -90,4 +89,14 @@
             </ion-fab-button>
         </ion-fab>
     </form>
+    <ion-item>
+        <ion-label position="floating">Restaurante:</ion-label>
+            <ion-select [(ngModel)]="restauranteSelecionado">
+                <ion-select-option *ngFor="let restaurante of restaurantes" [value]="restaurante.id">
+                    {{restaurante.nome}}
+                </ion-select-option>
+            </ion-select>
+    </ion-item>
 </ion-content>
+
+

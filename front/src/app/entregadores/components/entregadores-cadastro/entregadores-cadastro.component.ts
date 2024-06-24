@@ -5,7 +5,7 @@ import {ToastController} from '@ionic/angular';
 import {GeneroEnum} from '../../../../environments/genero.enum';
 import {HttpClient} from "@angular/common/http";
 import {TipoVeiculoEnum} from "../../../../environments/tipo_veiculo.enum";
-import {EntregadoresInterface} from "../../../interfaces";
+import {EntregadoresInterface, RestaurantesInterface} from "../../../interfaces";
 
 @Component({
     selector: 'app-entregadores-cadastro',
@@ -15,6 +15,8 @@ import {EntregadoresInterface} from "../../../interfaces";
 export class EntregadoresCadastroComponent implements OnInit {
     entregadorId: string | null;
     entregadoresForm: FormGroup;
+    restaurantes: RestaurantesInterface[] = [];
+    selectedRestaurants: RestaurantesInterface[] = [];
 
     constructor(
         private toastController: ToastController,
@@ -30,10 +32,17 @@ export class EntregadoresCadastroComponent implements OnInit {
         const id = this.activatedRoute.snapshot.paramMap.get('id');
         if (id) {
             this.entregadorId = id;
-            this.httpClient.get<EntregadoresInterface>(`http://localhost:3000/entregadores/${id}`).subscribe((entregador) => {
+            this.httpClient.get<any>(`http://localhost:3000/entregadores/${id}`).subscribe((entregador) => {
+
+                this.selectedRestaurants = entregador.restaurantes
+
                 this.entregadoresForm = this.createForm(entregador);
             });
         }
+
+        this.httpClient.get<RestaurantesInterface[]>(`http://localhost:3000/restaurantes`).subscribe((restaurantes) => {
+            this.restaurantes = restaurantes;
+        });
     }
 
     private createForm(entregador?: EntregadoresInterface) {
@@ -43,8 +52,8 @@ export class EntregadoresCadastroComponent implements OnInit {
                 Validators.minLength(3),
                 Validators.maxLength(150),
             ]),
-            data_nascimento: new FormControl(
-                entregador?.data_nascimento || new Date().toISOString()
+            dataNascimento: new FormControl(
+                entregador?.dataNascimento || new Date().toISOString()
             ),
             genero: new FormControl(
                 entregador?.genero || GeneroEnum.FEMININO,
@@ -57,24 +66,36 @@ export class EntregadoresCadastroComponent implements OnInit {
             tipoVeiculo: new FormControl(
                 entregador?.tipoVeiculo || TipoVeiculoEnum.MOTO,
                 Validators.required
-            ),
-        })
-            ;
+            )
+        });
     }
 
     salvar() {
-        const entregador: EntregadoresInterface = {
+        const entregador: any = {
             ...this.entregadoresForm.value,
             id: this.entregadorId,
+            restaurantes: this.selectedRestaurants
         };
 
         if (!entregador.id) {
             this.httpClient.post('http://localhost:3000/entregadores', entregador).subscribe(
                 () => this.router.navigate(['entregador']),
                 (erro) => {
-                    this.toastController
-                        .create({
-                            message: `Erro ao atualizar: ${erro.message}`,
+
+                    let messagem = '';
+
+                    if (Array.isArray(erro.error.message)) {
+                        erro.error.message.map((item: string)=> {
+                                console.log(item)
+                                messagem = messagem + item + ';';
+                            }
+                        )
+                    } else {
+                        messagem = erro.error.message;
+                    }
+
+                    this.toastController.create({
+                            message: `Erro ao atualizar: ${messagem}`,
                             duration: 5000,
                             keyboardClose: true,
                             color: 'danger',
@@ -89,9 +110,22 @@ export class EntregadoresCadastroComponent implements OnInit {
         this.httpClient.put(`http://localhost:3000/entregadores/${entregador.id}`, entregador).subscribe(
             () => this.router.navigate(['entregador']),
             (erro) => {
+
+                let messagem = '';
+
+                if (Array.isArray(erro.error.message)) {
+                    erro.error.message.map((item: string)=> {
+                        console.log(item)
+                        messagem = messagem + item + ';';
+                        }
+                    )
+                } else {
+                    messagem = erro.error.message;
+                }
+
                 this.toastController
                     .create({
-                        message: `Erro ao atualizar: ${erro.message}`,
+                        message: `Erro ao atualizar: ${messagem}`,
                         duration: 5000,
                         keyboardClose: true,
                         color: 'danger',
@@ -107,5 +141,20 @@ export class EntregadoresCadastroComponent implements OnInit {
 
     get placaVeiculo() {
         return this.entregadoresForm.get('placaVeiculo');
+    }
+
+    onRestaurantSelected(restaurant: RestaurantesInterface) {
+        const index = this.selectedRestaurants.findIndex(r => r.id === restaurant.id);
+        if (index === -1) {
+            this.selectedRestaurants.push(restaurant);
+        } else {
+            this.selectedRestaurants.splice(index, 1);
+        }
+
+        console.log(this.selectedRestaurants)
+    }
+
+    isSelected(restaurant: RestaurantesInterface): boolean {
+        return this.selectedRestaurants.some(r => r.id === restaurant.id);
     }
 }

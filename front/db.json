@@ -3,7 +3,7 @@
     {
       "id": 1,
       "nome": "Rodrigo Gomes",
-      "data_nascimento": "1976-02-25T00:00:00",
+      "dataNascimento": "1976-02-25T00:00:00",
       "genero": "M",
       "placaVeiculo": "JWD6298",
       "tipoVeiculo": "M"
@@ -11,7 +11,7 @@
     {
       "id": 2,
       "nome": "Davi Silva",
-      "data_nascimento": "2000-04-28T20:30:34.363-03:00",
+      "dataNascimento": "2000-04-28T20:30:34.363-03:00",
       "genero": "M",
       "placaVeiculo": "JWD6298",
       "tipoVeiculo": "M"

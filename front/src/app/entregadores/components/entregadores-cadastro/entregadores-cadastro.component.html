@@ -32,7 +32,7 @@
 
             <ion-modal [keepContentsMounted]="true">
                 <ng-template>
-                    <ion-datetime id="datetime" formControlName="data_nascimento" display-format="DD de MMMM de YYYY"
+                    <ion-datetime id="datetime" formControlName="dataNascimento" display-format="DD de MMMM de YYYY"
                         min="1930-01-01" presentation="date" showDefaultButtons="true" doneText="Selecionar"
                         cancelText="Cancelar"></ion-datetime>
                 </ng-template>
@@ -92,4 +92,14 @@
             </ion-fab-button>
         </ion-fab>
     </form>
+
+    <ion-list>
+        <ion-list-header>
+            <ion-label>Restaurantes</ion-label>
+        </ion-list-header>
+        <ion-item *ngFor="let restaurant of restaurantes" (click)="onRestaurantSelected(restaurant)">
+            <ion-label>{{ restaurant.nome }}</ion-label>
+            <ion-checkbox slot="start" [checked]="isSelected(restaurant)"></ion-checkbox>
+        </ion-item>
+    </ion-list>
 </ion-content>
