@@ -79,9 +79,12 @@ export class RestaurantesCadastroComponent implements OnInit {
     salvar() {
         const restaurante: RestaurantesInterface = {
             ...this.restaurantesForm.value,
-            id: this.restauranteId,
             entregadores: this.selectedEntregadores
         };
+
+        if (this.restauranteId != null) {
+            restaurante.id = this.restauranteId
+        }
 
         if (!restaurante.id) {
             this.httpClient.post('http://localhost:3000/restaurantes', restaurante).subscribe(

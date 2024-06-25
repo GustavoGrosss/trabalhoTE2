@@ -73,9 +73,12 @@ export class EntregadoresCadastroComponent implements OnInit {
     salvar() {
         const entregador: any = {
             ...this.entregadoresForm.value,
-            id: this.entregadorId,
             restaurantes: this.selectedRestaurants
         };
+
+        if (this.entregadorId != null){
+            entregador.id = this.entregadorId
+        }
 
         if (!entregador.id) {
             this.httpClient.post('http://localhost:3000/entregadores', entregador).subscribe(

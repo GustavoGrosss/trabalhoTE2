@@ -79,10 +79,13 @@ export class PratosCadastroComponent implements OnInit {
     salvar() {
         const prato: PratosInterface = {
             ...this.pratosForm.value,
-            id: this.pratoId,
             vegano: this.pratosForm.value.vegano == 'S',
             restauranteId: this.restauranteSelecionado
         };
+
+        if (this.pratoId != null) {
+            prato.id = this.pratoId;
+        }
 
         if (!prato.id) {
             this.httpClient.post('http://localhost:3000/pratos', prato).subscribe(
